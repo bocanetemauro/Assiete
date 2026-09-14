@@ -6,10 +6,6 @@ const nextConfig: NextConfig = {
     // Negeer TypeScript-fouten tijdens het bouwen op Vercel
     ignoreBuildErrors: true,
   },
-  eslint: {
-    // Negeer ESLint-fouten tijdens het bouwen
-    ignoreDuringBuilds: true,
-  },
 };
 
 export default nextConfig;
