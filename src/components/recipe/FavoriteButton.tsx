@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Heart } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useKitchen } from "@/lib/store/kitchen";
 import { useToast } from "@/components/ui/Toast";
@@ -11,20 +11,23 @@ import { cn } from "@/lib/utils";
 export function FavoriteButton({ recipeId, className, withLabel = false }: { recipeId: string; className?: string; withLabel?: boolean }) {
   const { user, ready, isFavorite, toggleFavorite } = useKitchen();
   const toast = useToast();
-  const router = useRouter();
   const pathname = usePathname();
   const [burst, setBurst] = useState(0);
   const active = ready && isFavorite(recipeId);
 
-  const onClick = (e: React.MouseEvent) => {
+  const onClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    // Geen gedwongen login: je blijft gewoon op het recept staan.
     if (!user) {
-      toast({ title: "Bewaar je favorieten", description: "Log in of maak een account om recepten op te slaan." });
-      router.push(`/inloggen?volgende=${encodeURIComponent(pathname)}`);
+      toast({
+        title: "Bewaar je favorieten",
+        description: "Met een gratis account blijven je favorieten bewaard op al je apparaten.",
+        action: { label: "Account maken", href: `/registreren?volgende=${encodeURIComponent(pathname)}` },
+      });
       return;
     }
-    if (toggleFavorite(recipeId)) setBurst((b) => b + 1);
+    if (await toggleFavorite(recipeId)) setBurst((b) => b + 1);
   };
 
   return (

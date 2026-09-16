@@ -1,14 +1,14 @@
 /**
- * Beeldverwerking in de browser. Foto's worden verkleind en als JPEG-data-URL
- * opgeslagen. Met echte image storage (S3, R2, Supabase) vervang je
- * `storeImage` door een upload die een publieke URL teruggeeft.
+ * Beeldverwerking in de browser: foto's worden verkleind tot een JPEG-blob
+ * voordat ze naar Supabase Storage gaan. Dat scheelt uploadtijd en houdt de
+ * bestanden ruim onder de limiet van de bucket (6 MB).
  */
 
 const MAX_BYTES = 20 * 1024 * 1024;
 
 export class ImageError extends Error {}
 
-export async function fileToDataUrl(file: File, maxSize = 1400, quality = 0.82): Promise<string> {
+async function drawToCanvas(file: File, maxSize: number): Promise<HTMLCanvasElement> {
   if (!file.type.startsWith("image/")) throw new ImageError("Kies een afbeelding (JPG, PNG, WEBP of HEIC).");
   if (file.size > MAX_BYTES) throw new ImageError("Deze foto is groter dan 20 MB.");
 
@@ -31,12 +31,27 @@ export async function fileToDataUrl(file: File, maxSize = 1400, quality = 0.82):
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, w, h);
     ctx.drawImage(img, 0, 0, w, h);
-    return canvas.toDataURL("image/jpeg", quality);
+    return canvas;
   } finally {
     URL.revokeObjectURL(url);
   }
 }
 
-export async function storeImage(file: File): Promise<string> {
-  return fileToDataUrl(file);
+/** Kleine voorvertoning voor in het formulier, voordat er geüpload wordt. */
+export async function fileToDataUrl(file: File, maxSize = 1400, quality = 0.82): Promise<string> {
+  return (await drawToCanvas(file, maxSize)).toDataURL("image/jpeg", quality);
+}
+
+/** Verkleinde JPEG om te uploaden. */
+export async function fileToJpegBlob(file: File, maxSize = 1600, quality = 0.84): Promise<Blob> {
+  const canvas = await drawToCanvas(file, maxSize);
+  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", quality));
+  if (!blob) throw new ImageError("De foto kon niet worden verwerkt.");
+  return blob;
+}
+
+/** Zet een data-URL uit het formulier terug om naar een blob om te uploaden. */
+export async function dataUrlToBlob(dataUrl: string): Promise<Blob> {
+  const res = await fetch(dataUrl);
+  return res.blob();
 }

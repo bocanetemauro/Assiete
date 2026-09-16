@@ -5,7 +5,7 @@ import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Category, Course, Difficulty, RecipeDetail } from "@/lib/types";
-import { CATEGORIES, CATEGORY_LABEL, COURSES, COURSE_LABEL, DIFFICULTIES, DIFFICULTY_LABEL, DIFFICULTY_LEVEL } from "@/lib/constants";
+import { CATEGORIES, CATEGORY_LABEL, COURSES, COURSE_LABEL, DIFFICULTIES, DIFFICULTY_LABEL, DIFFICULTY_LEVEL, QUICK_FILTERS } from "@/lib/constants";
 import { useKitchen } from "@/lib/store/kitchen";
 import { cn } from "@/lib/utils";
 import { RecipeCard } from "@/components/recipe/RecipeCard";
@@ -26,6 +26,8 @@ interface Filters {
 }
 
 const DEFAULTS: Filters = { q: "", cat: "alle", course: "alle", level: "alle", time: "alle", sort: "aanbevolen" };
+
+const PAGE_SIZE = 12;
 
 const TIME_OPTIONS: { value: TimeFilter; label: string }[] = [
   { value: "alle", label: "Alle" },
@@ -154,6 +156,12 @@ export function RecipeLibrary() {
 
   const set = <K extends keyof Filters>(key: K, value: Filters[K]) => setFilters((f) => ({ ...f, [key]: value }));
   const results = useMemo(() => filterRecipes(recipes, filters), [recipes, filters]);
+
+  // Elke kaart tekent een SVG-illustratie; in porties laden houdt de pagina licht.
+  const [visible, setVisible] = useState(PAGE_SIZE);
+  useEffect(() => setVisible(PAGE_SIZE), [filters]);
+  const shown = results.slice(0, visible);
+
   const activeCount = (["cat", "course", "level", "time"] as const).filter((k) => filters[k] !== "alle").length;
   const counts = useMemo(() => {
     const map = new Map<Category, number>();
@@ -219,7 +227,29 @@ export function RecipeLibrary() {
             </AnimatePresence>
           </div>
 
-          <div className="no-scrollbar -mx-5 mt-6 flex gap-2 overflow-x-auto px-5 md:mx-0 md:flex-wrap md:px-0">
+          <div className="no-scrollbar -mx-5 mt-6 flex items-center gap-2 overflow-x-auto px-5 md:mx-0 md:flex-wrap md:px-0">
+            <span className="eyebrow shrink-0 pr-1 text-[9.5px] text-muted">Snel naar</span>
+            {QUICK_FILTERS.map((quick) => {
+              const next = { ...readFilters(new URLSearchParams(quick.params)), sort: filters.sort };
+              const active = (["cat", "course", "level", "time"] as const).every((k) => filters[k] === next[k]) && !filters.q;
+              return (
+                <button
+                  key={quick.label}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => setFilters(active ? { ...DEFAULTS, sort: filters.sort } : next)}
+                  className={cn(
+                    "h-10 shrink-0 rounded-full border px-4 text-[13.5px] font-semibold transition-all duration-300",
+                    active ? "border-brass bg-brass text-white" : "border-line bg-cream text-ink-soft hover:border-brass/60 hover:text-ink",
+                  )}
+                >
+                  {quick.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="no-scrollbar -mx-5 mt-3 flex gap-2 overflow-x-auto px-5 md:mx-0 md:flex-wrap md:px-0">
             {(["alle", ...CATEGORIES] as const).map((c) => {
               const active = filters.cat === c;
               return (
@@ -275,10 +305,10 @@ export function RecipeLibrary() {
           </label>
         </div>
 
-        {results.length > 0 ? (
+        {results.length > 0 && (
           <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 2xl:grid-cols-4">
             <AnimatePresence mode="popLayout">
-              {results.map((recipe) => (
+              {shown.map((recipe) => (
                 <motion.div
                   key={recipe.id}
                   layout
@@ -292,7 +322,20 @@ export function RecipeLibrary() {
               ))}
             </AnimatePresence>
           </motion.div>
-        ) : (
+        )}
+
+        {results.length > 0 && visible < results.length && (
+          <div className="mt-12 flex flex-col items-center gap-3">
+            <Button variant="secondary" size="lg" onClick={() => setVisible((v) => v + PAGE_SIZE)}>
+              Meer recepten laden
+            </Button>
+            <p className="text-[13px] text-muted">
+              {shown.length} van de {results.length} getoond
+            </p>
+          </div>
+        )}
+
+        {results.length === 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mx-auto flex max-w-md flex-col items-center py-16 text-center">
             <div className="size-44">
               <ClocheIllustration label="?" />

@@ -30,22 +30,49 @@ export const DIFFICULTIES: Difficulty[] = ["makkelijk", "gemiddeld", "uitdagend"
 
 export const CATEGORY_LABEL: Record<Category, string> = {
   vlees: "Vlees",
-  vis: "Vis",
+  vis: "Vis & zeevruchten",
   vegetarisch: "Vegetarisch",
-  pasta: "Pasta",
+  pasta: "Pasta & rijst",
   soep: "Soep",
-  dessert: "Dessert",
+  sauzen: "Sauzen",
+  technieken: "Technieken",
+  plating: "Plating",
 };
 
-export const CATEGORIES: Category[] = ["vlees", "vis", "vegetarisch", "pasta", "soep", "dessert"];
+export const CATEGORIES: Category[] = ["vlees", "vis", "vegetarisch", "pasta", "soep", "sauzen", "technieken", "plating"];
+
+/** Achtergrondkleur van de illustratie, afgeleid van de eerste categorie. */
+export const TONE_BY_CATEGORY: Record<Category, string> = {
+  vlees: "#EDE3DA",
+  vis: "#DFE6E2",
+  vegetarisch: "#E3E6D6",
+  pasta: "#EFE6D2",
+  soep: "#F0E2D0",
+  sauzen: "#EFE4D4",
+  technieken: "#EAE5DC",
+  plating: "#EADDD5",
+};
 
 export const COURSE_LABEL: Record<Course, string> = {
+  amuse: "Amuse",
   voorgerecht: "Voorgerecht",
   hoofdgerecht: "Hoofdgerecht",
-  nagerecht: "Nagerecht",
+  nagerecht: "Dessert",
 };
 
-export const COURSES: Course[] = ["voorgerecht", "hoofdgerecht", "nagerecht"];
+export const COURSES: Course[] = ["amuse", "voorgerecht", "hoofdgerecht", "nagerecht"];
+
+/** Snelkoppelingen in de receptenbibliotheek (querystring-parameters). */
+export const QUICK_FILTERS = [
+  { label: "Desserts", params: { type: "nagerecht" } },
+  { label: "Amuses", params: { type: "amuse" } },
+  { label: "Moeilijke gerechten", params: { niveau: "uitdagend" } },
+  { label: "Snel klaar", params: { tijd: "30" } },
+  { label: "Sauzen", params: { categorie: "sauzen" } },
+  { label: "Vegetarisch", params: { categorie: "vegetarisch" } },
+  { label: "Vis", params: { categorie: "vis" } },
+  { label: "Technieken", params: { categorie: "technieken" } },
+] as const;
 
 export const PHASE_LABEL: Record<Phase, string> = {
   "mise-en-place": "Ingrediënten",
@@ -60,18 +87,7 @@ export const PHASE_LABEL: Record<Phase, string> = {
   dresseren: "Dresseren",
 };
 
-export const PHASE_ORDER: Phase[] = [
-  "mise-en-place",
-  "snijden",
-  "kruiden",
-  "verhitten",
-  "bakken",
-  "garen",
-  "saus",
-  "rusten",
-  "bord",
-  "dresseren",
-];
+export const PHASE_ORDER: Phase[] = ["mise-en-place", "snijden", "kruiden", "verhitten", "bakken", "garen", "saus", "rusten", "bord", "dresseren"];
 
 export const SCENE_LABEL: Record<SceneKey, string> = {
   prep: "Voorbereiden",

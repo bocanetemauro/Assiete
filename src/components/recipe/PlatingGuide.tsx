@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import { Lightbulb } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import type { DishKey, PlatingStep, RecipeDetail } from "@/lib/types";
+import type { DishArt, PlatingStep, RecipeDetail } from "@/lib/types";
 import { PLATING_PRINCIPLES, PLATING_STAGES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { DishIllustration } from "@/components/illustrations/dishes";
@@ -92,7 +92,7 @@ export function PlatingPrinciples({ className }: { className?: string }) {
 /* ------------------------------------------------------------------ */
 /* Interactieve stapper                                                */
 /* ------------------------------------------------------------------ */
-export function PlatingStepper({ dish, steps, tone = "#EEE7DC", className }: { dish: DishKey; steps?: PlatingStep[]; tone?: string; className?: string }) {
+export function PlatingStepper({ dish, steps, tone = "#EEE7DC", className }: { dish: DishArt; steps?: PlatingStep[]; tone?: string; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { amount: 0.4 });
   const [stage, setStage] = useState(0);

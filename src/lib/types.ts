@@ -1,48 +1,104 @@
 /**
  * Domeinmodel van Assiette.
  *
- * De `*Row`-types spiegelen één-op-één de tabellen uit `database/schema.sql`.
- * De UI werkt met samengestelde types (`RecipeDetail`, `CookedEntry`) die door de
- * repository uit die rijen worden opgebouwd. Zo kan de lokale opslag later zonder
- * UI-wijzigingen vervangen worden door een echte database of API.
+ * `*Row`-types spiegelen de Supabase-tabellen uit
+ * `supabase/migrations/*_init_schema.sql`. De UI werkt met samengestelde types
+ * (`RecipeDetail`, `CookedEntry`) die door `src/lib/services` worden opgebouwd.
  */
+
+import type { PaletteKey } from "@/components/illustrations/palette";
 
 export type ID = string;
 export type ISODate = string;
 
 export type Difficulty = "makkelijk" | "gemiddeld" | "uitdagend";
-export type Course = "voorgerecht" | "hoofdgerecht" | "nagerecht";
-export type Category = "vlees" | "vis" | "vegetarisch" | "pasta" | "soep" | "dessert";
+export type Course = "amuse" | "voorgerecht" | "hoofdgerecht" | "nagerecht";
+export type Category = "vlees" | "vis" | "vegetarisch" | "pasta" | "soep" | "sauzen" | "technieken" | "plating";
 
 /** Fase in het kookproces — voedt de visuele tijdlijn op de receptpagina. */
-export type Phase =
-  | "mise-en-place"
-  | "snijden"
-  | "kruiden"
-  | "verhitten"
-  | "bakken"
-  | "garen"
-  | "saus"
-  | "rusten"
-  | "bord"
-  | "dresseren";
+export type Phase = "mise-en-place" | "snijden" | "kruiden" | "verhitten" | "bakken" | "garen" | "saus" | "rusten" | "bord" | "dresseren";
 
-/** Geïllustreerde bord-composities (zie components/illustrations/dishes). */
-export type DishKey =
-  | "steak"
-  | "pasta"
-  | "seabass"
-  | "vegetables"
-  | "chocolate"
-  | "risotto"
-  | "duck"
-  | "scallops"
-  | "burrata"
-  | "lemon-tart"
-  | "soup"
-  | "salmon";
+/* ------------------------------------------------------------------ */
+/* Illustraties                                                        */
+/* ------------------------------------------------------------------ */
 
-/** Geïllustreerde kooktechnieken (zie components/illustrations/scenes). */
+/** Handgecomponeerde borden (zie components/illustrations/dishes). */
+export type DishKey = "steak" | "pasta" | "seabass" | "vegetables" | "chocolate" | "risotto" | "duck" | "scallops" | "burrata" | "lemon-tart" | "soup" | "salmon";
+
+export type PlateVariant = "porcelain" | "slate" | "stoneware" | "bowl" | "bowl-stone";
+export type ComposedLayout = "diagonal" | "center" | "trio" | "bowl" | "offset" | "scatter";
+export type SauceStyle = "swoosh" | "smear" | "line" | "dots" | "pool" | "crumble" | "fill" | "none";
+export type MainKind =
+  | "slices"
+  | "fillet"
+  | "medallions"
+  | "quenelle"
+  | "dome"
+  | "nest"
+  | "tart"
+  | "tower"
+  | "spears"
+  | "swirl"
+  | "grains"
+  | "wedges"
+  | "bar"
+  | "chops"
+  | "shells"
+  | "ravioli"
+  | "gnocchi"
+  | "ramekin"
+  | "halves"
+  | "prawns"
+  | "carpaccio"
+  | "cubes"
+  | "egg"
+  | "roll"
+  | "pavlova"
+  | "puffs"
+  | "fritters";
+export type GarnishKind =
+  | "berries"
+  | "dots"
+  | "tomatoes"
+  | "shallots"
+  | "mushrooms"
+  | "carrots"
+  | "crumble"
+  | "shards"
+  | "nuts"
+  | "cubes"
+  | "crisps"
+  | "samphire"
+  | "radish"
+  | "citrus"
+  | "roe"
+  | "cherries"
+  | "fondant"
+  | "asparagus"
+  | "petals"
+  | "onionRings"
+  | "capers"
+  | "appleFan"
+  | "beets"
+  | "leaves"
+  | "peas"
+  | "mussels"
+  | "potatoes"
+  | "figs";
+export type HerbKind = "cress" | "micro" | "chervil" | "dill" | "chives" | "flakes" | "pepper" | "basil" | "mint" | "flowers" | "zest" | "thyme" | "sage" | "rosemary" | "sesame" | "gold" | "cocoa";
+
+/** Beschrijving van een bord dat door de bord-componist wordt getekend. */
+export interface ComposedDish {
+  plate: PlateVariant;
+  layout: ComposedLayout;
+  sauce: { style: SauceStyle; color: PaletteKey; accent?: PaletteKey };
+  main: { kind: MainKind; color: PaletteKey; accent?: PaletteKey; count?: number };
+  garnish: { kind: GarnishKind; color?: PaletteKey; variant?: "blueberry" | "raspberry" | "cherry" }[];
+  herbs: HerbKind[];
+}
+
+export type DishArt = DishKey | ComposedDish;
+
 export type SceneKey =
   | "prep"
   | "chop"
@@ -91,7 +147,12 @@ export type SceneItem =
   | "parmesan"
   | "truffle"
   | "sage"
-  | "potato";
+  | "potato"
+  | "prawns"
+  | "chicken"
+  | "egg"
+  | "apple"
+  | "mussels";
 
 /** Kleur van een vloeistof in een pan/kom (saus, room, bouillon…). */
 export type LiquidTone =
@@ -108,67 +169,70 @@ export type LiquidTone =
   | "lemon"
   | "soy"
   | "egg-white"
-  | "risotto";
+  | "risotto"
+  | "saffron"
+  | "caramel"
+  | "tomato"
+  | "jus";
 
 export interface SceneSpec {
   key: SceneKey;
   item?: SceneItem;
   tone?: LiquidTone;
-  /** Alleen voor `plate`: welk gerecht wordt gedresseerd. */
-  dish?: DishKey;
+  /** Alleen voor `plate`: welk bord wordt gedresseerd. */
+  dish?: DishArt;
 }
 
 /* ------------------------------------------------------------------ */
-/* Tabellen                                                            */
+/* Databaserijen (Supabase)                                            */
 /* ------------------------------------------------------------------ */
 
-export interface UserRow {
+export interface ProfileRow {
   id: ID;
-  email: string;
-  name: string;
-  password_hash: string;
+  display_name: string;
   bio: string | null;
   avatar_url: string | null;
   created_at: ISODate;
+  updated_at: ISODate;
 }
 
 export interface RecipeRow {
   id: ID;
   slug: string;
+  source: "platform" | "user";
+  author_id: ID | null;
+  is_public: boolean;
   title: string;
   subtitle: string | null;
   description: string;
   story: string | null;
-  source: "platform" | "user";
-  author_id: ID | null;
   course: Course;
-  categories: Category[];
   difficulty: Difficulty;
   servings: number;
   prep_minutes: number;
   cook_minutes: number;
   rest_minutes: number;
-  dish: DishKey | null;
+  dish: DishArt | null;
   tone: string;
-  key_ingredients: string[];
+  tags: string[];
+  equipment: string[];
   plating_intro: string | null;
   plating_notes: string | null;
   chef_tip: string | null;
   pairing: string | null;
-  is_daily: boolean;
   created_at: ISODate;
   updated_at: ISODate;
 }
 
-export interface IngredientRow {
+export interface RecipeIngredientRow {
   id: ID;
   recipe_id: ID;
   position: number;
   group_name: string | null;
   quantity: number | null;
   unit: string;
-  name: string;
   note: string | null;
+  ingredient: { name: string } | null;
 }
 
 export interface RecipeStepRow {
@@ -181,28 +245,27 @@ export interface RecipeStepRow {
   scene: SceneSpec | null;
   timer_seconds: number | null;
   tip: string | null;
-  image_id: ID | null;
+  image_path: string | null;
 }
 
 export interface PlatingStepRow {
   id: ID;
   recipe_id: ID;
-  position: number;
   stage: number;
   title: string;
   body: string;
 }
 
-export type ImageKind = "cover" | "gallery" | "step" | "cooked";
+export type ImageKind = "cover" | "gallery" | "cooked";
 
 export interface RecipeImageRow {
   id: ID;
-  user_id: ID | null;
+  user_id: ID;
   recipe_id: ID | null;
-  step_id: ID | null;
   cooked_recipe_id: ID | null;
   kind: ImageKind;
-  url: string;
+  storage_path: string;
+  position: number;
   alt: string | null;
   created_at: ISODate;
 }
@@ -210,7 +273,6 @@ export interface RecipeImageRow {
 export type SavedKind = "favorite" | "cook_again";
 
 export interface SavedRecipeRow {
-  id: ID;
   user_id: ID;
   recipe_id: ID;
   kind: SavedKind;
@@ -221,30 +283,10 @@ export interface CookedRecipeRow {
   id: ID;
   user_id: ID;
   recipe_id: ID;
+  title: string | null;
   note: string | null;
   duration_minutes: number | null;
   cooked_at: ISODate;
-}
-
-export interface UserRecipeRow {
-  id: ID;
-  user_id: ID;
-  recipe_id: ID;
-  status: "draft" | "published";
-  created_at: ISODate;
-}
-
-export interface DatabaseState {
-  version: 1;
-  users: UserRow[];
-  recipes: RecipeRow[];
-  ingredients: IngredientRow[];
-  recipe_steps: RecipeStepRow[];
-  plating_steps: PlatingStepRow[];
-  recipe_images: RecipeImageRow[];
-  saved_recipes: SavedRecipeRow[];
-  cooked_recipes: CookedRecipeRow[];
-  user_recipes: UserRecipeRow[];
 }
 
 /* ------------------------------------------------------------------ */
@@ -258,6 +300,7 @@ export interface User {
   bio: string | null;
   avatarUrl: string | null;
   createdAt: ISODate;
+  emailConfirmed: boolean;
 }
 
 export interface Ingredient {
@@ -296,6 +339,7 @@ export interface RecipeDetail {
   description: string;
   story: string | null;
   source: "platform" | "user";
+  isPublic: boolean;
   author: { id: ID; name: string } | null;
   course: Course;
   categories: Category[];
@@ -305,9 +349,11 @@ export interface RecipeDetail {
   cookMinutes: number;
   restMinutes: number;
   totalMinutes: number;
-  dish: DishKey | null;
+  dish: DishArt | null;
   tone: string;
   keyIngredients: string[];
+  tags: string[];
+  equipment: string[];
   platingIntro: string | null;
   platingNotes: string | null;
   chefTip: string | null;
@@ -352,8 +398,12 @@ export interface RecipeDraft {
     timerMinutes: string;
     scene: SceneKey | "";
   }[];
+  /** Bestaande publieke URL's of nieuwe data-URL's (worden bij opslaan geüpload). */
   photos: string[];
   platingNotes: string;
+  chefTip: string;
+  equipment: string;
+  isPublic: boolean;
 }
 
 export interface KitchenStats {

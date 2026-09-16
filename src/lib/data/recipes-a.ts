@@ -3,7 +3,10 @@ import type { RecipeSeed } from "./seed-types";
 export const RECIPES_A: RecipeSeed[] = [
   /* ---------------------------------------------------------------- */
   {
+    id: "6d077ba3-7614-46e3-8a1f-bdf766904e3a",
     slug: "steak-met-blauwe-bessensaus",
+    tags: ["aanbraden","arroseren","saus","vlees laten rusten"],
+    equipment: ["Gietijzeren pan","Kernthermometer","Steekring van 4 cm","Steelpan","Fijne zeef","Snijplank"],
     title: "Gebakken steak met blauwe bessensaus",
     subtitle: "Entrecote, rozemarijnboter & fondantaardappel",
     description:
@@ -151,7 +154,10 @@ export const RECIPES_A: RecipeSeed[] = [
 
   /* ---------------------------------------------------------------- */
   {
+    id: "a7dcfd0d-2a79-4667-8ffb-ced0dcfb7091",
     slug: "romige-truffelpasta",
+    tags: ["verse pasta","emulsie","truffel","snel"],
+    equipment: ["Grote kookpan","Hoge koekenpan","Microplane","Truffelschaaf","Vleesvork en pollepel"],
     title: "Romige truffelpasta",
     subtitle: "Verse tagliatelle, Parmigiano & zwarte truffel",
     description: "Zijdezachte tagliatelle in een romige saus van Parmigiano Reggiano, afgewerkt met flinterdunne schaafsel zwarte truffel.",
@@ -266,7 +272,10 @@ export const RECIPES_A: RecipeSeed[] = [
 
   /* ---------------------------------------------------------------- */
   {
+    id: "79611908-5dc6-49ee-972b-7322be8d9688",
     slug: "zeebaars-met-beurre-blanc",
+    tags: ["beurre blanc","krokant vel","monteren","klassiek Frans"],
+    equipment: ["Antiaanbakpan","Visspatel","Steelpan","Garde","Fijne zeef"],
     title: "Zeebaars met beurre blanc",
     subtitle: "Krokant vel, groene asperges & zeekraal",
     description: "Zeebaarsfilet met een krokant gebakken vel op een fluweelzachte beurre blanc, met groene asperges en zilte zeekraal.",
@@ -386,7 +395,10 @@ export const RECIPES_A: RecipeSeed[] = [
 
   /* ---------------------------------------------------------------- */
   {
+    id: "f87edd64-06ce-4cc1-a15e-a65f3c7a1758",
     slug: "geroosterde-groenten-met-kruidenolie",
+    tags: ["roosteren","kruidenolie","seizoen","groenten"],
+    equipment: ["Oven","Bakplaat met bakpapier","Blender","Kaasdoek of koffiefilter"],
     title: "Geroosterde groenten met kruidenolie",
     subtitle: "Bospeen, biet, labneh & pistache",
     description: "Gekaramelliseerde bospeen en bieten op zijdezachte labneh, met een felgroene kruidenolie en geroosterde pistache.",
@@ -492,14 +504,17 @@ export const RECIPES_A: RecipeSeed[] = [
 
   /* ---------------------------------------------------------------- */
   {
+    id: "323a916d-003c-45d9-8b40-8a00f97f0dd2",
     slug: "chocolade-cremeux-met-vanille",
+    tags: ["crémeux","quenelle","patisserie","chocolade"],
+    equipment: ["Steelpan","Thermometer","Staafmixer","Garde","Twee eetlepels","Oven"],
     title: "Chocoladecrémeux met vanille",
     subtitle: "Pure chocolade, vanillecrème & cacaocrumble",
     description: "Een fluweelzachte crémeux van pure chocolade met een quenelle vanillecrème, knapperige cacaocrumble en frisse framboos.",
     story:
       "Een dessert van contrasten: bitter en zoet, zijdezacht en knapperig, diep bruin en fris rood. De crémeux vraagt precisie — de rest is pure dressage.",
     course: "nagerecht",
-    categories: ["dessert"],
+    categories: ["plating"],
     difficulty: "uitdagend",
     servings: 4,
     prepMinutes: 30,
@@ -612,7 +627,10 @@ export const RECIPES_A: RecipeSeed[] = [
 
   /* ---------------------------------------------------------------- */
   {
+    id: "4f03d2fa-7b2c-4197-b652-52d24950584a",
     slug: "risotto-met-bospaddenstoelen",
+    tags: ["risotto","mantecatura","paddenstoelen","roeren"],
+    equipment: ["Sauteuse met dikke bodem","Houten spatel","Pollepel","Koekenpan"],
     title: "Risotto met bospaddenstoelen",
     subtitle: "Carnaroli, tijm & Parmigiano",
     description: "Romige carnaroli-risotto met goudbruin gebakken bospaddenstoelen, verse tijm en een laatste klont koude boter.",

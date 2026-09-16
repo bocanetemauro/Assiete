@@ -25,6 +25,11 @@ import {
   WoodenSpoon,
 } from "./cookware";
 import {
+  Apples,
+  ChickenBreast,
+  Eggs,
+  Mussels,
+  Prawns,
   Asparagus,
   Berries,
   Bread,
@@ -269,6 +274,16 @@ function Whole({ item, x, y, s = 1 }: Pos & { item?: SceneItem }) {
           <Herbs kind="thyme" x={x + 110} y={y + 10} s={s * 0.6} />
         </g>
       );
+    case "prawns":
+      return <Prawns x={x} y={y} s={s} />;
+    case "chicken":
+      return <ChickenBreast x={x} y={y} s={s} />;
+    case "egg":
+      return <Eggs x={x} y={y} s={s} />;
+    case "apple":
+      return <Apples x={x} y={y} s={s} />;
+    case "mussels":
+      return <Mussels x={x} y={y} s={s} />;
     default:
       return <Garlic x={x} y={y} s={s} />;
   }
@@ -330,6 +345,16 @@ function InPan({ item, x, y, s = 1 }: Pos & { item?: SceneItem }) {
       return <RiceGrains x={x} y={y} s={s * 1.4} />;
     case "potato":
       return <Scallops state="seared" count={3} x={x} y={y} s={s * 1.35} />;
+    case "prawns":
+      return <Prawns state="cooked" x={x} y={y} s={s * 0.95} />;
+    case "chicken":
+      return <ChickenBreast state="seared" x={x} y={y + 10} s={s * 0.95} />;
+    case "apple":
+      return <Apples state="sliced" x={x} y={y} s={s} />;
+    case "mussels":
+      return <Mussels open x={x} y={y} s={s} />;
+    case "egg":
+      return <Eggs x={x} y={y} s={s} />;
     case "bread":
       return <Bread state="toasted" x={x} y={y} s={s} />;
     case "pasta":

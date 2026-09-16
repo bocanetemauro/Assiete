@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
-import { ArrowLeft, ChefHat, Pencil, Play, Wine, X } from "lucide-react";
+import { ArrowLeft, ChefHat, Pencil, Play, UtensilsCrossed, Wine, X } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
@@ -256,6 +256,44 @@ export function RecipePage({ recipe }: { recipe: RecipeDetail }) {
               <h2 className="mt-3 font-serif text-[clamp(2.4rem,4.6vw,3.8rem)] leading-none">Ingrediënten</h2>
             </Reveal>
             <IngredientList recipe={recipe} className="mt-10" />
+
+            {recipe.equipment.length > 0 && (
+              <Reveal delay={0.1}>
+                <div className="mt-12 rounded-[26px] border border-line bg-cream p-6">
+                  <p className="eyebrow flex items-center gap-2 text-[10px] text-muted">
+                    <UtensilsCrossed className="size-4 text-brass" strokeWidth={1.8} />
+                    Wat je nodig hebt
+                  </p>
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {recipe.equipment.map((item) => (
+                      <li key={item} className="rounded-full bg-paper px-4 py-2 text-[14px] text-ink-soft">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            )}
+
+            {recipe.tags.length > 0 && (
+              <Reveal delay={0.15}>
+                <div className="mt-6">
+                  <p className="eyebrow text-[10px] text-muted">Technieken in dit recept</p>
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {recipe.tags.map((tag) => (
+                      <li key={tag}>
+                        <Link
+                          href={`/recepten?q=${encodeURIComponent(tag)}`}
+                          className="inline-flex h-9 items-center rounded-full border border-line px-4 text-[13.5px] text-ink-soft transition hover:border-brass hover:text-ink"
+                        >
+                          {tag}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            )}
           </div>
           <aside className="space-y-6 lg:sticky lg:top-[152px] lg:self-start">
             {prepScene && (

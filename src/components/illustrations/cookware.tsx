@@ -20,6 +20,10 @@ export const LIQUID: Record<LiquidTone, [string, string, string]> = {
   soy: ["#A1623A", "#5E3319", "#2E1609"],
   "egg-white": ["#FFFFFF", "#F4F1EA", "#D7D0C3"],
   risotto: ["#FCF3DA", "#EAD6A2", "#C4AA70"],
+  saffron: ["#FFE39A", "#F2B53A", "#C07A12"],
+  caramel: ["#F7C77A", "#C9822E", "#7A4410"],
+  tomato: ["#FF8A6E", "#D8392A", "#8A1A10"],
+  jus: ["#B7634A", "#5E2416", "#2C0E07"],
 };
 
 /** Afgeronde rechthoek in perspectief (hoeken als ellipsbogen). */

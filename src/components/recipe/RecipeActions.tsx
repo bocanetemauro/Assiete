@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Repeat, Share2 } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useKitchen } from "@/lib/store/kitchen";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/Toast";
@@ -10,7 +10,6 @@ import { useToast } from "@/components/ui/Toast";
 export function CookAgainButton({ recipeId, className, compact = false }: { recipeId: string; className?: string; compact?: boolean }) {
   const { user, ready, isCookAgain, toggleCookAgain } = useKitchen();
   const toast = useToast();
-  const router = useRouter();
   const pathname = usePathname();
   const active = ready && isCookAgain(recipeId);
 
@@ -18,15 +17,19 @@ export function CookAgainButton({ recipeId, className, compact = false }: { reci
     <button
       type="button"
       aria-pressed={active}
-      onClick={(e) => {
+      onClick={async (e) => {
         e.preventDefault();
         e.stopPropagation();
+        // Geen gedwongen login: het recept blijft gewoon open staan.
         if (!user) {
-          toast({ title: "Zet recepten op je lijst", description: "Log in om recepten als ‘opnieuw maken’ te markeren." });
-          router.push(`/inloggen?volgende=${encodeURIComponent(pathname)}`);
+          toast({
+            title: "Zet recepten op je lijst",
+            description: "Met een gratis account houd je bij wat je opnieuw wilt maken.",
+            action: { label: "Account maken", href: `/registreren?volgende=${encodeURIComponent(pathname)}` },
+          });
           return;
         }
-        const now = toggleCookAgain(recipeId);
+        const now = await toggleCookAgain(recipeId);
         toast({ title: now ? "Op je lijst ‘Opnieuw maken’" : "Van je lijst gehaald", tone: now ? "success" : "default" });
       }}
       className={cn(

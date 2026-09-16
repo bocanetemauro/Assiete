@@ -17,28 +17,34 @@ const darkInput =
   "w-full rounded-2xl border border-ivory/15 bg-ivory/[0.05] px-4 py-3.5 text-[15px] text-ivory placeholder:text-ivory/35 transition focus:border-brass-soft/60 focus:bg-ivory/[0.08] focus:outline-none";
 
 export function ShowYourPlate({ recipe }: { recipe: RecipeDetail }) {
-  const { user, ready, logCooked, cookedFor, signInDemo } = useKitchen();
+  const { user, ready, logCooked, cookedFor } = useKitchen();
   const toast = useToast();
   const [photo, setPhoto] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
   const [minutes, setMinutes] = useState(String(recipe.totalMinutes));
   const [saved, setSaved] = useState<CookedEntry | null>(null);
+  const [busy, setBusy] = useState(false);
   const history = ready ? cookedFor(recipe.id) : [];
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
-    const entry = logCooked({
-      recipeId: recipe.id,
-      title: title.trim() || null,
-      note,
-      photoUrl: photo,
-      durationMinutes: Math.max(1, Math.round(Number(minutes.replace(",", ".")) || recipe.totalMinutes)),
-    });
-    if (entry) {
-      setSaved(entry);
-      toast({ title: "Bewaard in Mijn keuken", description: `${recipe.title} · ${formatDate(entry.cookedAt)}`, tone: "success" });
+    if (!user || busy) return;
+    setBusy(true);
+    try {
+      const entry = await logCooked({
+        recipeId: recipe.id,
+        title: title.trim() || null,
+        note,
+        photoUrl: photo,
+        durationMinutes: Math.max(1, Math.round(Number(minutes.replace(",", ".")) || recipe.totalMinutes)),
+      });
+      if (entry) {
+        setSaved(entry);
+        toast({ title: "Bewaard in Mijn keuken", description: `${recipe.title} · ${formatDate(entry.cookedAt)}`, tone: "success" });
+      }
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -122,20 +128,20 @@ export function ShowYourPlate({ recipe }: { recipe: RecipeDetail }) {
                 </label>
                 {ready && !user ? (
                   <div className="rounded-2xl bg-ivory/[0.06] p-5">
-                    <p className="font-serif text-xl">Log in om je gerecht te bewaren</p>
-                    <p className="mt-1 text-[14px] text-ivory/55">Je foto blijft staan terwijl je inlogt met het demo-account.</p>
+                    <p className="font-serif text-xl">Bewaar je bord met een gratis account</p>
+                    <p className="mt-1 text-[14px] text-ivory/55">Je foto en tekst blijven hier staan terwijl je een account maakt of inlogt.</p>
                     <div className="mt-4 flex flex-wrap gap-2">
-                      <Button variant="brass" onClick={signInDemo}>
-                        Ga verder met demo-account
-                      </Button>
+                      <ButtonLink href={`/registreren?volgende=${encodeURIComponent(`/recepten/${recipe.slug}#laat-je-bord-zien`)}`} variant="brass">
+                        Account maken
+                      </ButtonLink>
                       <ButtonLink href={`/inloggen?volgende=${encodeURIComponent(`/recepten/${recipe.slug}#laat-je-bord-zien`)}`} variant="outline-light">
                         Inloggen
                       </ButtonLink>
                     </div>
                   </div>
                 ) : (
-                  <Button type="submit" variant="brass" size="lg" className="w-full" disabled={!ready}>
-                    Bewaar in Mijn keuken
+                  <Button type="submit" variant="brass" size="lg" className="w-full" disabled={!ready || busy}>
+                    {busy ? "Bezig met opslaan…" : "Bewaar in Mijn keuken"}
                   </Button>
                 )}
               </motion.form>

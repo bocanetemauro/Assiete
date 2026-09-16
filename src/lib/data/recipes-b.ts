@@ -3,7 +3,10 @@ import type { RecipeSeed } from "./seed-types";
 export const RECIPES_B: RecipeSeed[] = [
   /* ---------------------------------------------------------------- */
   {
+    id: "bbaf7684-51cd-45f6-8403-f18bf29ffa9f",
     slug: "eendenborst-met-kersen",
+    tags: ["koude start","jus","crème","rosé bakken"],
+    equipment: ["Koekenpan","Kernthermometer","Blender of staafmixer","Fijne zeef","Mandoline"],
     title: "Eendenborst met kersen en pastinaak",
     subtitle: "Krokant vetrandje, kersenjus & pastinaakcrème",
     description: "Rosé gebakken eendenborst met een krokant vetrandje, een glanzende kersenjus met port en fluweelzachte pastinaakcrème.",
@@ -136,7 +139,10 @@ export const RECIPES_B: RecipeSeed[] = [
 
   /* ---------------------------------------------------------------- */
   {
+    id: "d50a708b-02ed-4b5e-8362-d9d52ab2c6a2",
     slug: "coquilles-met-bloemkoolcreme",
+    tags: ["beurre noisette","aanbraden","crème","zeevruchten"],
+    equipment: ["Gietijzeren of stalen pan","Blender","Steelpan","Keukenpapier"],
     title: "Coquilles met bloemkoolcrème",
     subtitle: "Beurre noisette, hazelnoot & groene appel",
     description: "Goudbruin gebakken coquilles op een zijdezachte bloemkoolcrème, met nootachtige beurre noisette, geroosterde hazelnoot en frisse appel.",
@@ -253,7 +259,10 @@ export const RECIPES_B: RecipeSeed[] = [
 
   /* ---------------------------------------------------------------- */
   {
+    id: "145a6888-4f6d-4778-a0fb-3bce0c5a8754",
     slug: "burrata-met-tomaat-en-basilicumolie",
+    tags: ["zomer","kruidenolie","snel","tomaat"],
+    equipment: ["Blender","Fijne zeef of koffiefilter","Grillpan"],
     title: "Burrata met tomaat en basilicumolie",
     subtitle: "Kerstomaten, balsamico & zuurdesem",
     description: "Romige burrata met gekleurde kerstomaten, felgroene basilicumolie, oude balsamico en een knapperige crostino.",
@@ -352,14 +361,17 @@ export const RECIPES_B: RecipeSeed[] = [
 
   /* ---------------------------------------------------------------- */
   {
+    id: "a96bbde3-1887-43ee-a551-c7a564cc76be",
     slug: "citroentarte-met-meringue",
+    tags: ["zanddeeg","lemon curd","meringue","brander"],
+    equipment: ["Taartring van 20 cm","Bakbonen","Garde","Spuitzak met sterspuitmond","Gasbrander","Microplane"],
     title: "Citroentarte met meringue",
     subtitle: "Zanddeeg, lemon curd & gebrande meringue",
     description: "Een krokante zanddeegbodem gevuld met frisse lemon curd, afgewerkt met gebrande meringuetoefjes en citroenzeste.",
     story:
       "Patisserie in zijn puurste vorm: drie basistechnieken — zanddeeg, curd en meringue — samen in één tartelette. Wie deze tarte beheerst, beheerst de basis van de Franse banketbakkerij.",
     course: "nagerecht",
-    categories: ["dessert"],
+    categories: ["technieken"],
     difficulty: "uitdagend",
     servings: 6,
     prepMinutes: 45,
@@ -487,7 +499,10 @@ export const RECIPES_B: RecipeSeed[] = [
 
   /* ---------------------------------------------------------------- */
   {
+    id: "a89cb35b-7655-478d-9714-8c215b6e7cac",
     slug: "pompoensoep-met-salie",
+    tags: ["velouté","roosteren","herfst","krokant"],
+    equipment: ["Oven","Blender","Soeppan","Koekenpan"],
     title: "Pompoensoep met krokante salie",
     subtitle: "Geroosterde flespompoen, crème fraîche & pompoenpit",
     description: "Fluweelzachte soep van geroosterde flespompoen met een wervel crème fraîche, krokante salie en geroosterde pompoenpitten.",
@@ -590,7 +605,10 @@ export const RECIPES_B: RecipeSeed[] = [
 
   /* ---------------------------------------------------------------- */
   {
+    id: "4d11192c-4a4a-49f6-b184-223a530343b1",
     slug: "zalm-tataki-met-sesam",
+    tags: ["tataki","sesam","Japans","ijswater"],
+    equipment: ["Gietijzeren pan","Kom met ijswater","Lang, scherp mes","Dunschiller"],
     title: "Zalm tataki met sesam",
     subtitle: "Soja-gemberdressing, komkommer & radijs",
     description: "Kort dichtgeschroeide zalm in een sesamkorst met een frisse soja-gemberdressing, komkommerlinten en krokante radijs.",

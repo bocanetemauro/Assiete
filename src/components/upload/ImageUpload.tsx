@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Camera, ImagePlus, LoaderCircle, RefreshCw, Trash, X } from "lucide-react";
 import { useRef, useState, type DragEvent } from "react";
-import { storeImage } from "@/lib/services/images";
+import { fileToDataUrl } from "@/lib/services/images";
 import { cn } from "@/lib/utils";
 
 function useImagePicker(onPicked: (url: string) => void) {
@@ -18,7 +18,7 @@ function useImagePicker(onPicked: (url: string) => void) {
     setBusy(true);
     setError(null);
     try {
-      for (const file of list) onPicked(await storeImage(file));
+      for (const file of list) onPicked(await fileToDataUrl(file));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Uploaden is mislukt.");
     } finally {

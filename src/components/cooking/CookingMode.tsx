@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check, Lightbulb, ListChecks, Plus, RotateCcw, X } from "lucide-react";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { RecipeDetail, RecipeStep } from "@/lib/types";
 import { PHASE_LABEL } from "@/lib/constants";
 import { useWakeLock } from "@/lib/hooks";
@@ -97,8 +97,8 @@ function FinishScreen({ recipe }: { recipe: RecipeDetail }) {
             variant="outline-light"
             size="lg"
             disabled={logged}
-            onClick={() => {
-              if (logCooked({ recipeId: recipe.id, title: null, note: "", photoUrl: null })) {
+            onClick={async () => {
+              if (await logCooked({ recipeId: recipe.id, title: null, note: "", photoUrl: null })) {
                 setLogged(true);
                 toast({ title: "Gemarkeerd als gemaakt", description: "Je vindt het terug in Mijn keuken.", tone: "success" });
               }
@@ -113,8 +113,8 @@ function FinishScreen({ recipe }: { recipe: RecipeDetail }) {
             )}
           </Button>
         ) : (
-          <ButtonLink href={`/inloggen?volgende=${encodeURIComponent(`/recepten/${recipe.slug}#laat-je-bord-zien`)}`} variant="outline-light" size="lg">
-            Log in om te bewaren
+          <ButtonLink href={`/registreren?volgende=${encodeURIComponent(`/recepten/${recipe.slug}#laat-je-bord-zien`)}`} variant="outline-light" size="lg">
+            Account maken om te bewaren
           </ButtonLink>
         )}
       </div>
@@ -179,7 +179,12 @@ export function CookingMode({ recipe }: { recipe: RecipeDetail }) {
   const [drawer, setDrawer] = useState(false);
   useWakeLock(true);
 
+  // Lees ?stap= precies één keer (StrictMode draait effecten dubbel, en het
+  // URL-effect hieronder overschrijft de parameter al bij de eerste render).
+  const readInitialStep = useRef(false);
   useEffect(() => {
+    if (readInitialStep.current) return;
+    readInitialStep.current = true;
     const stap = Number(new URLSearchParams(window.location.search).get("stap"));
     if (stap > 0) setIndex(clamp(stap - 1, 0, total));
   }, [total]);

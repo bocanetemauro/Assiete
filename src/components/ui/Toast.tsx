@@ -2,17 +2,24 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Info, X } from "lucide-react";
+import Link from "next/link";
 import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from "react";
 
 type Tone = "default" | "success";
+/** Optionele vervolgstap, bv. "Maak een account". Nooit een gedwongen redirect. */
+interface ToastAction {
+  label: string;
+  href: string;
+}
 interface ToastItem {
   id: number;
   title: string;
   description?: string;
   tone: Tone;
+  action?: ToastAction;
 }
 
-const ToastContext = createContext<(t: { title: string; description?: string; tone?: Tone }) => void>(() => {});
+const ToastContext = createContext<(t: { title: string; description?: string; tone?: Tone; action?: ToastAction }) => void>(() => {});
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<ToastItem[]>([]);
@@ -21,10 +28,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const dismiss = useCallback((id: number) => setItems((list) => list.filter((t) => t.id !== id)), []);
 
   const toast = useCallback(
-    ({ title, description, tone = "default" }: { title: string; description?: string; tone?: Tone }) => {
+    ({ title, description, tone = "default", action }: { title: string; description?: string; tone?: Tone; action?: ToastAction }) => {
       const id = ++counter.current;
-      setItems((list) => [...list.slice(-2), { id, title, description, tone }]);
-      window.setTimeout(() => dismiss(id), 4200);
+      setItems((list) => [...list.slice(-2), { id, title, description, tone, action }]);
+      window.setTimeout(() => dismiss(id), action ? 7000 : 4200);
     },
     [dismiss],
   );
@@ -50,6 +57,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold">{t.title}</p>
                 {t.description && <p className="mt-0.5 text-[13px] leading-snug text-ivory/70">{t.description}</p>}
+                {t.action && (
+                  <Link
+                    href={t.action.href}
+                    onClick={() => dismiss(t.id)}
+                    className="mt-2 inline-flex items-center rounded-full bg-brass px-3 py-1.5 text-[13px] font-semibold text-ink transition hover:brightness-105"
+                  >
+                    {t.action.label}
+                  </Link>
+                )}
               </div>
               <button onClick={() => dismiss(t.id)} className="grid size-7 place-items-center rounded-full text-ivory/60 hover:bg-ivory/10 hover:text-ivory" aria-label="Sluiten">
                 <X className="size-4" />

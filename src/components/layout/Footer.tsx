@@ -64,7 +64,7 @@ export function Footer() {
         </div>
         <div className="mt-20 flex flex-col gap-3 border-t border-ivory/10 pt-8 text-[13px] text-ivory/45 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} {BRAND.name}. Een demo met voorbeeldrecepten en lokale opslag.
+            © {new Date().getFullYear()} {BRAND.name}. Alle recepten zijn origineel en vrij te lezen.
           </p>
           <p className="font-serif text-base italic text-ivory/55">Van het eerste ingrediënt tot de laatste penseelstreek.</p>
         </div>

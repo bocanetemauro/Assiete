@@ -1,13 +1,16 @@
-import type { Category, Course, Difficulty, DishKey, Phase, SceneSpec } from "@/lib/types";
+import type { Category, Course, Difficulty, DishArt, Phase, SceneSpec } from "@/lib/types";
 
 /** [hoeveelheid, eenheid, naam, notitie?] */
 export type IngredientSeed = [number | null, string, string, string?];
 
 /**
- * Leesbaar auteursformaat voor platformrecepten. `src/lib/data/index.ts`
- * normaliseert dit naar dezelfde structuur als de databasetabellen.
+ * Leesbaar auteursformaat voor platformrecepten (originele content van Assiette).
+ * `src/lib/data/index.ts` normaliseert dit voor de UI en
+ * `scripts/generate-seed.mjs` zet het om naar SQL voor Supabase.
  */
 export interface RecipeSeed {
+  /** Vaste unieke ID — identiek in de code en in de database. */
+  id: string;
   slug: string;
   title: string;
   subtitle: string;
@@ -20,9 +23,11 @@ export interface RecipeSeed {
   prepMinutes: number;
   cookMinutes: number;
   restMinutes?: number;
-  dish: DishKey;
+  dish: DishArt;
   tone: string;
   keyIngredients: string[];
+  tags: string[];
+  equipment: string[];
   isDaily?: boolean;
   ingredients: { group: string | null; items: IngredientSeed[] }[];
   steps: { title: string; body: string; phase: Phase; scene: SceneSpec; timer?: number; tip?: string }[];

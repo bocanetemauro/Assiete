@@ -8,7 +8,8 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { motion } from "framer-motion";
-import type { DishKey } from "@/lib/types";
+import type { DishArt, DishKey } from "@/lib/types";
+import { composeDish } from "./composer";
 import { GroundShadow, INK, RadialGradient, LinearGradient, Sparkle, cos, outline, rand, sin, useUid } from "./kit";
 
 type Tri = [string, string, string];
@@ -1582,9 +1583,41 @@ const SalmonDish = {
 /* ------------------------------------------------------------------ */
 /* Register                                                            */
 /* ------------------------------------------------------------------ */
-type DishArt = { plate: PlateVariant; Sauce: () => ReactNode; Main: () => ReactNode; Garnish: () => ReactNode; Herbs: () => ReactNode; Smudge: () => ReactNode };
+export type DishLayers = { plate: PlateVariant; Sauce: () => ReactNode; Main: () => ReactNode; Garnish: () => ReactNode; Herbs: () => ReactNode; Smudge: () => ReactNode };
 
-const DISHES: Record<DishKey, DishArt> = {
+/* Gedeelde bouwstenen voor de bord-componist (composer.tsx). */
+export {
+  BeetWedge,
+  Berry,
+  CherryHalf,
+  Chervil,
+  Chives,
+  Cress,
+  Dot,
+  Flakes,
+  FondantPotato,
+  Hazelnut,
+  Leaf,
+  Micro,
+  MushroomHalf,
+  OnionPetal,
+  ParsnipCrisp,
+  Pepper,
+  Pop,
+  Quenelle,
+  RoastCarrot,
+  RoastedShallot,
+  Rosemary,
+  SageLeaf,
+  Samphire,
+  Smudges,
+  Swoosh,
+  TomatoHalf,
+  scatter,
+  spiralPath,
+};
+
+const DISHES: Record<DishKey, DishLayers> = {
   steak: Steak,
   pasta: Pasta,
   seabass: Seabass,
@@ -1631,7 +1664,7 @@ export function DishIllustration({
   className,
   title,
 }: {
-  dish: DishKey;
+  dish: DishArt;
   stage?: number;
   mode?: DishMode;
   animated?: boolean;
@@ -1640,7 +1673,7 @@ export function DishIllustration({
   className?: string;
   title?: string;
 }) {
-  const art = DISHES[dish] ?? Steak;
+  const art = typeof dish === "string" ? (DISHES[dish] ?? Steak) : composeDish(dish);
   const [auto, setAuto] = useState(mode === "static" ? 5 : 0);
 
   useEffect(() => {

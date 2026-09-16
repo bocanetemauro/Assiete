@@ -6,7 +6,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { useKitchen } from "@/lib/store/kitchen";
 import { RecipePage } from "./RecipePage";
 
-/** Eigen recepten staan in lokale opslag en worden daarom client-side opgezocht. */
+/** Recepten van leden worden client-side opgehaald; platformrecepten zijn statisch. */
 export function RecipeResolver({ slug, view }: { slug: string; view: "page" | "cooking" }) {
   const { ready, getRecipe } = useKitchen();
   const recipe = ready ? getRecipe(slug) : undefined;

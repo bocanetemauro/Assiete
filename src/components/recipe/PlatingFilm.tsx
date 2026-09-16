@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
-import type { DishKey, RecipeDetail } from "@/lib/types";
+import type { DishArt, RecipeDetail } from "@/lib/types";
 import { PLATING_STAGES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { DishIllustration } from "@/components/illustrations/dishes";
@@ -12,7 +12,7 @@ import { EASE_CHEF } from "@/components/ui/Reveal";
  * Scroll-gestuurde "mini-film": terwijl je scrolt verschijnt achtereenvolgens
  * het lege bord, de saus, het hoofdonderdeel, garnituur, kruiden en de schone rand.
  */
-export function PlatingFilm({ recipe, dish }: { recipe: RecipeDetail; dish: DishKey }) {
+export function PlatingFilm({ recipe, dish }: { recipe: RecipeDetail; dish: DishArt }) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const [stage, setStage] = useState(0);

@@ -871,3 +871,136 @@ export function ButterBlock({ ...p }: Place) {
     </g>
   );
 }
+
+/* ------------------------------------------------------------------ */
+/* Aanvullende ingrediënten                                            */
+/* ------------------------------------------------------------------ */
+export function Prawns({ state = "raw", ...p }: Place & { state?: "raw" | "cooked" }) {
+  const cooked = state === "cooked";
+  const body = cooked ? "#F2865A" : "#A9B8C0";
+  const light = cooked ? "#FFC2A0" : "#DCE6EA";
+  const dark = cooked ? "#B8481F" : "#6E8290";
+  return (
+    <g transform={place(p)}>
+      {[
+        [-40, -6, -10],
+        [0, -14, 8],
+        [40, -4, 22],
+      ].map(([px, py, rot], i) => {
+        const d = "M-26 -10 C -4 -34 30 -22 28 4 C 26 20 8 26 -4 18";
+        return (
+          <g key={i} transform={`translate(${px} ${py}) rotate(${rot})`}>
+            <path d={d} stroke={INK} strokeWidth={19} fill="none" strokeLinecap="round" />
+            <path d={d} stroke={body} strokeWidth={15} fill="none" strokeLinecap="round" />
+            <path d={d} stroke={light} strokeWidth={5} fill="none" strokeLinecap="round" transform="translate(-2 -3)" />
+            {[
+              [-10, -24, -8, -14],
+              [6, -24, 4, -14],
+              [20, -12, 12, -6],
+              [22, 4, 12, 2],
+            ].map(([x1, y1, x2, y2], k) => (
+              <path key={k} d={`M${x1} ${y1} L ${x2} ${y2}`} stroke={dark} strokeWidth={1.4} />
+            ))}
+            <path d="M-4 18 l -16 10 l 4 -16 Z" fill={dark} stroke={INK} strokeWidth={1.2} strokeLinejoin="round" />
+            <path d="M-26 -10 l -14 -12 M -24 -8 l -16 -4" stroke={dark} strokeWidth={1.2} strokeLinecap="round" />
+          </g>
+        );
+      })}
+    </g>
+  );
+}
+
+const BREAST = "M-76 -30 C -70 -60 -10 -72 40 -62 C 76 -54 90 -36 80 -18 C 70 0 30 4 -18 2 C -56 0 -80 -8 -76 -30 Z";
+
+export function ChickenBreast({ state = "raw", ...p }: Place & { state?: "raw" | "seared" }) {
+  const id = useUid();
+  const seared = state === "seared";
+  return (
+    <g transform={place(p)}>
+      <defs>
+        <RadialGradient id={id} cx={0.42} cy={0.4} r={0.72} stops={seared ? [[0, "#F4C47A"], [0.6, "#D2913E"], [1, "#94581C"]] : [[0, "#FCE6DE"], [0.6, "#F2C7BA"], [1, "#D89E8E"]]} />
+      </defs>
+      <path d={BREAST} transform="translate(0 16)" fill={seared ? "#B8742E" : "#E7B2A2"} {...outline} />
+      <path d={BREAST} fill={`url(#${id})`} {...outline} />
+      {seared ? (
+        scatter6.map(([cx, cy], i) => <ellipse key={i} cx={cx} cy={cy} rx={6} ry={3} fill="#8A4E1A" opacity={0.4} />)
+      ) : (
+        <path d="M-50 -30 C -20 -40 20 -40 50 -30" stroke="#FFFFFF" strokeOpacity={0.5} strokeWidth={2} fill="none" />
+      )}
+      <path d="M-54 -50 C -36 -60 -12 -64 10 -62" stroke="#FFFFFF" strokeOpacity={0.45} strokeWidth={3} strokeLinecap="round" fill="none" />
+    </g>
+  );
+}
+
+const scatter6: [number, number][] = [
+  [-40, -40],
+  [-8, -50],
+  [30, -36],
+  [52, -24],
+  [-54, -22],
+  [8, -18],
+];
+
+export function Eggs({ ...p }: Place) {
+  const id = useUid();
+  return (
+    <g transform={place(p)}>
+      <defs>
+        <RadialGradient id={id} cx={0.35} cy={0.3} r={0.8} stops={[[0, "#FBEADB"], [0.7, "#E6C4A2"], [1, "#C79A72"]]} />
+      </defs>
+      <path d="M-30 -2 C -52 -2 -58 -40 -44 -62 C -36 -74 -24 -74 -16 -62 C -2 -40 -8 -2 -30 -2 Z" fill={`url(#${id})`} {...outline} />
+      <path d="M-40 -56 C -38 -62 -34 -64 -30 -64" stroke="#FFFFFF" strokeWidth={3} strokeLinecap="round" opacity={0.7} fill="none" />
+      <path d="M8 -18 L 14 -26 L 20 -18 L 28 -26 L 34 -18 L 42 -26 L 48 -18 C 50 -4 40 4 28 4 C 16 4 6 -4 8 -18 Z" fill="#FBF6EE" {...outline} />
+      <ellipse cx={28} cy={-14} rx={11} ry={6} fill="#F5A623" stroke={INK} strokeWidth={1.3} />
+      <ellipse cx={24} cy={-16} rx={3.5} ry={1.8} fill="#FFFFFF" opacity={0.7} />
+    </g>
+  );
+}
+
+export function Apples({ state = "whole", ...p }: Place & { state?: "whole" | "sliced" }) {
+  const id = useUid();
+  return (
+    <g transform={place(p)}>
+      <defs>
+        <RadialGradient id={id} cx={0.35} cy={0.3} r={0.8} stops={[[0, "#E8F29A"], [0.6, "#9CC24A"], [1, "#5E8A22"]]} />
+      </defs>
+      {state === "whole" ? (
+        <g>
+          <path d="M0 -58 C 30 -70 52 -48 48 -22 C 44 4 20 6 0 0 C -20 6 -44 4 -48 -22 C -52 -48 -30 -70 0 -58 Z" fill={`url(#${id})`} {...outline} />
+          <path d="M0 -58 C 2 -66 4 -72 8 -76" stroke="#6A4A2A" strokeWidth={3} strokeLinecap="round" fill="none" />
+          <path d="M8 -70 C 22 -80 34 -72 30 -64 C 20 -62 12 -64 8 -70 Z" fill="#5E9A3E" stroke={INK} strokeWidth={1.2} />
+          <ellipse cx={-22} cy={-42} rx={10} ry={6} fill="#FFFFFF" opacity={0.55} />
+        </g>
+      ) : (
+        <g>
+          {[-36, -12, 12, 36].map((ox, i) => (
+            <g key={ox} transform={`translate(${ox} ${-i * 3}) rotate(${-10 + i * 6})`}>
+              <path d="M-22 0 C -22 -30 22 -30 22 0 Z" fill="#FBF6D8" {...outline} strokeWidth={1.6} />
+              <path d="M-22 0 C -22 -30 22 -30 22 0" stroke="#8AB83A" strokeWidth={3} fill="none" />
+              <path d="M-4 -8 l 4 -6 l 4 6" stroke="#B8A070" strokeWidth={1.2} fill="none" />
+            </g>
+          ))}
+        </g>
+      )}
+    </g>
+  );
+}
+
+export function Mussels({ open = false, ...p }: Place & { open?: boolean }) {
+  return (
+    <g transform={place(p)}>
+      {[
+        [-44, -4, -20],
+        [-14, -14, 10],
+        [18, -2, 30],
+        [46, -12, -10],
+      ].map(([mx, my, rot], i) => (
+        <g key={i} transform={`translate(${mx} ${my}) rotate(${rot})`}>
+          <path d="M0 -26 C 18 -24 22 0 16 18 C 10 30 -12 28 -16 14 C -20 -4 -14 -24 0 -26 Z" fill="#22222C" stroke={INK} strokeWidth={2} strokeLinejoin="round" />
+          <path d="M-6 -18 C 4 -20 10 -8 8 6" stroke="#5A6A8A" strokeWidth={2} fill="none" opacity={0.8} />
+          {(open || i % 2 === 1) && <path d="M0 -16 C 10 -14 12 0 9 10 C 5 18 -8 17 -9 8 C -10 -2 -7 -15 0 -16 Z" fill="#F29A4A" stroke={INK} strokeWidth={1} />}
+        </g>
+      ))}
+    </g>
+  );
+}

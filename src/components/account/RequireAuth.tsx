@@ -5,14 +5,17 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { useKitchen } from "@/lib/store/kitchen";
 import { DishIllustration } from "@/components/illustrations/dishes";
-import { Button, ButtonLink } from "@/components/ui/Button";
+import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
-import { useToast } from "@/components/ui/Toast";
 
+/**
+ * Alleen voor persoonlijke pagina's (Mijn keuken, Profiel, Eigen recept). De
+ * rest van de site — recepten, plating, het dagmenu — is altijd zonder account
+ * te bekijken.
+ */
 export function RequireAuth({ children, title, description, eyebrow = "Jouw keuken" }: { children: ReactNode; title: ReactNode; description: string; eyebrow?: string }) {
-  const { ready, user, signInDemo } = useKitchen();
+  const { ready, user } = useKitchen();
   const pathname = usePathname();
-  const toast = useToast();
 
   if (!ready) {
     return (
@@ -48,18 +51,12 @@ export function RequireAuth({ children, title, description, eyebrow = "Jouw keuk
             </span>
             <div>
               <p className="font-semibold">Eerst even rondkijken?</p>
-              <p className="mt-1 text-[14px] leading-relaxed text-muted">Het demo-account is gevuld met gekookte gerechten, favorieten, statistieken en twee eigen recepten.</p>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="-ml-3 mt-2 underline decoration-brass underline-offset-4"
-                onClick={() => {
-                  signInDemo();
-                  toast({ title: "Welkom, Noor", description: "Je verkent Assiette met het demo-account.", tone: "success" });
-                }}
-              >
-                Verken met demo-account
-              </Button>
+              <p className="mt-1 text-[14px] leading-relaxed text-muted">
+                Alle 52 recepten, de plating-academie en het dagmenu zijn vrij toegankelijk. Een account heb je alleen nodig om favorieten, foto&apos;s en eigen recepten te bewaren.
+              </p>
+              <ButtonLink href="/recepten" variant="ghost" size="sm" className="-ml-3 mt-2 underline decoration-brass underline-offset-4">
+                Bekijk de recepten
+              </ButtonLink>
             </div>
           </div>
         </Reveal>
