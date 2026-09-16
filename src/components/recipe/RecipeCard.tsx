@@ -38,17 +38,22 @@ export function RecipeCard({ recipe, index, variant = "default", className }: { 
         transition={{ type: "spring", stiffness: 260, damping: 26 }}
         className={cn("group relative grid overflow-hidden rounded-[32px] bg-cream shadow-card transition-shadow duration-500 hover:shadow-lift md:grid-cols-[1.1fr_1fr]", className)}
       >
-        <Link href={href} className="relative block aspect-square overflow-hidden md:aspect-auto md:min-h-[540px]" style={{ background: recipe.tone }} aria-label={recipe.title}>
-          <div className="paper-grain absolute inset-0" />
-          <div className={cn("absolute transition-transform duration-[1400ms] ease-chef group-hover:scale-[1.03]", photo ? "inset-0" : "inset-[7%] group-hover:rotate-[10deg]")}>
-            <RecipeVisual recipe={recipe} />
+        {/* De illustratie is één kolom; badges en hartje zweven erboven, buiten de grid-flow. */}
+        <div className="relative">
+          <Link href={href} className="relative block aspect-square overflow-hidden md:aspect-auto md:h-full md:min-h-[540px]" style={{ background: recipe.tone }} aria-label={recipe.title}>
+            <div className="paper-grain absolute inset-0" />
+            <div className={cn("absolute transition-transform duration-[1400ms] ease-chef group-hover:scale-[1.03]", photo ? "inset-0" : "inset-[7%] group-hover:rotate-[10deg]")}>
+              <RecipeVisual recipe={recipe} />
+            </div>
+          </Link>
+          <div className="absolute left-5 top-5 flex flex-wrap gap-2">
+            <span className="eyebrow rounded-full bg-ink px-3 py-1.5 text-[9.5px] text-ivory">Chef&apos;s keuze</span>
+            <CookedBadge recipeId={recipe.id} />
           </div>
-        </Link>
-        <div className="absolute left-5 top-5 flex flex-wrap gap-2">
-          <span className="eyebrow rounded-full bg-ink px-3 py-1.5 text-[9.5px] text-ivory">Chef&apos;s keuze</span>
-          <CookedBadge recipeId={recipe.id} />
+          <div className="absolute right-5 top-5">
+            <FavoriteButton recipeId={recipe.id} />
+          </div>
         </div>
-        <FavoriteButton recipeId={recipe.id} className="absolute right-5 top-5 md:left-[calc(55%-4.25rem)] md:right-auto" />
         <div className="flex flex-col justify-center gap-6 p-7 sm:p-10 lg:p-14">
           <div>
             <p className="eyebrow text-brass">{eyebrow}</p>
