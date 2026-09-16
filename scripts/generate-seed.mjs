@@ -1,6 +1,6 @@
 /**
  * Genereert SQL-migraties met de categorieën en alle platformrecepten uit
- * `src/lib/data/recipes-*.ts`, zodat code en database dezelfde content en ID's
+ * `shared/src/lib/data/recipes-*.ts`, zodat code en database dezelfde content en ID's
  * delen (nodig voor favorieten en gekookte gerechten via foreign keys).
  *
  * Gebruik:  node scripts/generate-seed.mjs
@@ -10,13 +10,13 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { RECIPES_A } from "../src/lib/data/recipes-a.ts";
-import { RECIPES_B } from "../src/lib/data/recipes-b.ts";
-import { RECIPES_C } from "../src/lib/data/recipes-c.ts";
-import { RECIPES_D } from "../src/lib/data/recipes-d.ts";
-import { RECIPES_E } from "../src/lib/data/recipes-e.ts";
-import { RECIPES_F } from "../src/lib/data/recipes-f.ts";
-import { CATEGORIES, CATEGORY_LABEL, COURSES, COURSE_LABEL, PLATING_STAGES } from "../src/lib/constants.ts";
+import { RECIPES_A } from "../shared/src/lib/data/recipes-a.ts";
+import { RECIPES_B } from "../shared/src/lib/data/recipes-b.ts";
+import { RECIPES_C } from "../shared/src/lib/data/recipes-c.ts";
+import { RECIPES_D } from "../shared/src/lib/data/recipes-d.ts";
+import { RECIPES_E } from "../shared/src/lib/data/recipes-e.ts";
+import { RECIPES_F } from "../shared/src/lib/data/recipes-f.ts";
+import { CATEGORIES, CATEGORY_LABEL, COURSES, COURSE_LABEL, PLATING_STAGES } from "../shared/src/lib/constants.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = join(root, "supabase", "migrations");

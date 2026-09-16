@@ -1,0 +1,32 @@
+{
+  "name": "@assiette/app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "De Android-app van Assiette (Capacitor rond een statische export).",
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build:app": "node scripts/build-apk.mjs --export-only",
+    "android:apk": "node scripts/build-apk.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@assiette/shared": "0.1.0",
+    "@capacitor/app": "^7.1.2",
+    "@capacitor/core": "^7.6.9",
+    "@capacitor/splash-screen": "^7.0.5",
+    "@capacitor/status-bar": "^7.0.6",
+    "next": "16.3.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^7.6.9",
+    "@capacitor/cli": "^7.6.9",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "4.3.3",
+    "typescript": "^5.9.3"
+  }
+}

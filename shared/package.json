@@ -1,0 +1,17 @@
+{
+  "name": "@assiette/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Gedeelde kern van website en app: recepten, ontwerp, componenten, inloggen, vrienden en de Supabase-koppeling.",
+  "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.116.0",
+    "framer-motion": "13.3.0",
+    "lucide-react": "1.46.0"
+  },
+  "peerDependencies": {
+    "next": "16.3.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  }
+}

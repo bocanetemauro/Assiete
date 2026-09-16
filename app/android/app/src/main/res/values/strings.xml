@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Assiette</string>
+    <string name="title_activity_main">Assiette</string>
+    <string name="package_name">nl.assiette.app</string>
+    <string name="custom_url_scheme">nl.assiette.app</string>
+</resources>
